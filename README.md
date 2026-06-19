@@ -1,4 +1,4 @@
-# Projet Google Colab — Options Pricing EUR
+# Projet Google Colab 
 
 Construction d'une courbe de taux zéro-coupon pour l'EUR à partir des données publiques de la BCE.
 
