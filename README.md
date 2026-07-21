@@ -7,7 +7,7 @@ A collection of quantitative finance models built in Python (Google Colab), cove
 ## 1. Portfolio Risk — VaR & CVaR (Three Methodologies)
 
 **Notebook:** `Var+Cvar+Monte_carlo.ipynb`  
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gianni04/projet-google-colab/blob/main/Var%2BCvar%2BMonte_carlo.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gianni04/quantitative-finance-projects/blob/main/Var%2BCvar%2BMonte_carlo.ipynb)
 
 ### What it does
 Implements and compares three industry-standard methodologies to estimate **Value at Risk (VaR)** and **Conditional VaR (CVaR / Expected Shortfall)** at the 99% confidence level on real market data fetched via `yfinance`.
@@ -45,7 +45,7 @@ Python · NumPy · pandas · SciPy · yfinance · Plotly
 ## 2. Options Pricing Engine — Black-Scholes & Binomial Tree
 
 **Notebook:** `option.ipynb`  
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gianni04/projet-google-colab/blob/main/option.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gianni04/quantitative-finance-projects/blob/main/option.ipynb)
 
 ### What it does
 A full options pricing engine built around two models and an object-oriented architecture (`VanillaOption`, `MarketEnvironment`, `BlackScholesPricer`, `BinomialTreePricer`).
@@ -89,7 +89,7 @@ Python · NumPy · SciPy · Plotly · ipywidgets
 ## 3. EUR/US Yield Curve Analysis
 
 **Notebook:** `EUR_US_Yield_Curveipynb.ipynb`  
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gianni04/projet-google-colab/blob/main/EUR_US_Yield_Curveipynb.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gianni04/quantitative-finance-projects/blob/main/EUR_US_Yield_Curveipynb.ipynb)
 
 ### What it does
 Analyses and visualises the EUR and USD government yield curves across maturities, exploring the term structure of interest rates and key spread dynamics.
