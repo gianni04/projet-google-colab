@@ -67,9 +67,9 @@ Cox-Ross-Rubinstein binomial tree with backward induction and early exercise che
 
 **Example output** (S=100, K=100, T=1y, r=5%, q=2%, σ=20%):
 ```
-BSM Call European    : 10.XXXX
-Binomial Call European : 10.XXXX  → converges to BSM
-Binomial Call American : 10.XXXX  → early exercise premium
+BSM Call European      : 10.4506
+Binomial Call European : 10.4502  → converges to BSM
+Binomial Call American : 10.4502  → no early exercise premium on non-dividend call
 ```
 
 ### Visualisations
