@@ -17,26 +17,23 @@ Implements and compares three industry-standard methodologies to estimate **Valu
 | Method | Approach | Key assumption |
 |---|---|---|
 | **Historical Simulation** | Sorts actual log-returns and reads the 1st percentile | No distributional assumption |
-| **Parametric (Variance-Covariance)** | Fits a normal distribution to portfolio returns using the covariance matrix | Returns are normally distributed |
-| **Monte Carlo Simulation** | Generates 50,000 correlated daily return paths via Cholesky decomposition | Normality + covariance structure |
+| **Parametric (Variance-Covariance)** | Fits a normal distribution using the covariance matrix | Returns are normally distributed |
+| **Monte Carlo Simulation** | Generates 50,000 correlated daily paths via Cholesky decomposition | Normality + covariance structure |
 
 ### Portfolios tested
 
-- **Single asset — UBS Group (UBS):**  
+- **Single asset — UBS Group:**  
   Historical VaR 99%: **-5.64%** | CVaR 99%: **-8.51%**
 
 - **Single asset — Bitcoin (BTC-USD):**  
   Historical VaR 99%: **-8.91%** | CVaR 99%: **-13.24%**
 
 - **Diversified portfolio (9 assets):**  
-  LVMH, Sanofi, L'Oréal, Airbus (FR equities, 40%) + Apple, Microsoft, NVIDIA (US tech, 30%) + TLT bond ETF (20%) + Ethereum (10%)  
+  LVMH, Sanofi, L'Oréal, Airbus (FR, 40%) + Apple, Microsoft, NVIDIA (US, 30%) + TLT bonds (20%) + Ethereum (10%)  
   Historical VaR 99%: **-3.24%** | CVaR 99%: **-4.58%**
 
 ### Key result
-The three methodologies diverge most on fat-tailed assets (BTC): Historical Simulation captures extreme tail events better than the Parametric approach, which underestimates tail risk by assuming normality. Monte Carlo and Parametric converge on near-Gaussian assets (UBS, diversified portfolio), confirming the model's coherence.
-
-### Visualisation
-Interactive Plotly charts overlay the three return distributions with their respective VaR lines for each portfolio.
+The three methodologies diverge most on fat-tailed assets (BTC): Historical Simulation captures extreme tail events better than Parametric, which underestimates tail risk by assuming normality. Monte Carlo and Parametric converge on near-Gaussian assets (UBS, diversified portfolio), confirming the model's coherence.
 
 ### Stack
 ```
@@ -45,30 +42,46 @@ Python · NumPy · pandas · SciPy · yfinance · Plotly
 
 ---
 
-## 2. Options Pricing & Greeks — Black-Scholes Model
+## 2. Options Pricing Engine — Black-Scholes & Binomial Tree
 
 **Notebook:** `option.ipynb`  
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gianni04/projet-google-colab/blob/main/option.ipynb)
 
 ### What it does
-Implements the **Black-Scholes analytical model** to price European call and put options and computes the full set of **Greeks** to quantify the sensitivity of option value to changes in market inputs.
+A full options pricing engine built around two models and an object-oriented architecture (`VanillaOption`, `MarketEnvironment`, `BlackScholesPricer`, `BinomialTreePricer`).
 
-### Greeks computed
+### Model 1 — Black-Scholes (European options)
 
-| Greek | Measures sensitivity to |
-|---|---|
-| **Delta (Δ)** | Change in underlying price |
-| **Gamma (Γ)** | Rate of change of Delta |
-| **Vega (ν)** | Implied volatility |
-| **Theta (Θ)** | Time decay (passage of time) |
-| **Rho (ρ)** | Risk-free interest rate |
+Analytical closed-form pricing with dividends (`q`) for European calls and puts, including four Greeks:
 
-### Why it matters
-Greeks are the primary tool used by risk desks and options traders to hedge and monitor derivative exposure. Delta and Gamma drive dynamic hedging strategies; Vega and Theta determine the cost of holding options positions over time.
+| Greek | Formula basis | Normalisation |
+|---|---|---|
+| **Delta (Δ)** | `e^{-qT} · N(d1)` | Raw (0 to ±1) |
+| **Gamma (Γ)** | `e^{-qT} · N'(d1) / (S·σ·√T)` | Raw |
+| **Vega (ν)** | `S · e^{-qT} · N'(d1) · √T` | Divided by 100 (per 1% vol move) |
+| **Theta (Θ)** | Full expression with both carry terms | Divided by 365 (daily decay) |
+
+### Model 2 — Binomial Tree CRR (American options)
+
+Cox-Ross-Rubinstein binomial tree with backward induction and early exercise check at each node. Convergence to Black-Scholes confirmed on European options.
+
+**Example output** (S=100, K=100, T=1y, r=5%, q=2%, σ=20%):
+```
+BSM Call European    : 10.XXXX
+Binomial Call European : 10.XXXX  → converges to BSM
+Binomial Call American : 10.XXXX  → early exercise premium
+```
+
+### Visualisations
+
+- **Interactive Greeks dashboard** (ipywidgets sliders): real-time Price / Delta / Gamma / Theta curves for any Call or Put, with ATM strike line
+- **American vs European price comparison**: side-by-side curves + early exercise premium filled area
+- **3D Implied Volatility Surface**: Strike × Maturity grid with moneyness skew (`-0.12 × (K/S - 1)`) and term structure (`0.04 / √T`)
+- **3D American Premium Surface**: Spot × Maturity grid of `Price_American - Price_BSM` (Inferno colorscale)
 
 ### Stack
 ```
-Python · NumPy · pandas · SciPy · Matplotlib
+Python · NumPy · SciPy · Plotly · ipywidgets
 ```
 
 ---
@@ -90,11 +103,11 @@ Python · pandas · Matplotlib
 
 ## Setup
 
-All notebooks run directly in Google Colab — no local installation required. Click any **Open in Colab** badge above to launch.
+All notebooks run directly in Google Colab — no local installation required. Click any **Open in Colab** badge above.
 
 To run locally:
 ```bash
-pip install numpy pandas scipy yfinance matplotlib plotly
+pip install numpy pandas scipy yfinance matplotlib plotly ipywidgets
 ```
 
 ---
