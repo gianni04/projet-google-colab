@@ -101,6 +101,31 @@ Python · pandas · Matplotlib
 
 ---
 
+## 4. On-Chain Market Microstructure — Nascent AMM Pool vs Mature Market
+
+**Folder:** [`on-chain-market-microstructure/`](on-chain-market-microstructure/) · **Report (PDF):** [`report/rapport.pdf`](on-chain-market-microstructure/report/rapport.pdf)
+
+### What it does
+A comparative market-microstructure study of two Automated Market Maker (AMM) regimes, using **real on-chain data**: a freshly-deployed illiquid token pool (**HLD/ETH**, Uniswap V4 on Base) characterised **analytically**, versus a deep, actively-traded pool (**ETH/USDC**, Uniswap V3 on Ethereum) estimated **econometrically on 6,737 real swaps**.
+
+### Highlights
+
+| Area | What was done |
+|---|---|
+| **On-chain data engineering** | Read a Uniswap V4 pool's raw state from the Singleton `PoolManager` via `extsload` — deriving `poolId` (keccak256), locating the storage slot, decoding the packed `Slot0` (no public getter). |
+| **AMM microstructure model** | Constant-product model → slippage, market depth, impermanent loss, execution cost. |
+| **Econometrics on real data** | Extracted 6,737 Uniswap V3 `Swap` events; estimated **Kyle's price-impact λ**, realised volatility and effective spread (OLS, t-stats, R²). |
+
+### Key result
+Moving the price **+1%** costs **~$0.03** on HLD vs **~$3.2M** on ETH/USDC (a **~10⁸** depth gap). Kyle's λ on ETH/USDC is estimated at **0.011 $/ETH²** (t = 317, R² = 0.94) on **6,737 real swaps** — a near-zero, statistically-significant impact typical of a deep market. Methodological point: classical price-series analytics (volatility, GARCH) are **not identifiable** on the newborn pool, so it is modelled, not estimated — the study only estimates where real data exists.
+
+### Stack
+```
+Python · NumPy · pandas · web3 · eth-abi · on-chain data · econometrics
+```
+
+---
+
 ## Setup
 
 All notebooks run directly in Google Colab — no local installation required. Click any **Open in Colab** badge above.
